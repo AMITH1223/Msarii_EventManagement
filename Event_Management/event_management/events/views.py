@@ -8,6 +8,7 @@ from .models import Event, Registration
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils import timezone
+from django.urls import reverse 
 
 # registeration
 def register(request):
@@ -15,7 +16,7 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('dashboard')
+            return redirect('login')
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
@@ -73,7 +74,6 @@ def register_event(request):
     return render(request, 'register_event.html')
 
 # bashboard
-@login_required
 def dashboard(request):
     current_date = timezone.now()
     registrations = Registration.objects.filter(user=request.user).select_related('event')
